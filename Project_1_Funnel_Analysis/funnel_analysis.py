@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Генерация синтетических данных
 np.random.seed(42)
@@ -66,4 +67,43 @@ plt.grid(True)
 if not os.path.exists('Project_1_Funnel_analysis/visualizations'):
     os.makedirs('Project_1_Funnel_analysis/visualizations')
 plt.savefig('Project_1_Funnel_analysis/visualizations/funnel_by_device.png')
+plt.show()
+
+# Сравнительный график конверсий
+plt.figure(figsize=(12, 6))
+
+# Конверсии по устройствам
+devices = funnel_by_device.index
+device_conv = funnel_by_device['overall']
+plt.bar(devices, device_conv, color='skyblue', alpha=0.7, label='Device Type')
+
+# Конверсии по регионам
+regions = funnel_by_region.index
+region_conv = funnel_by_region['overall']
+plt.bar(regions, region_conv, color='salmon', alpha=0.7, label='Region', width=0.4)
+
+plt.title('Overall Conversion Rates by Device Type and Region')
+plt.ylabel('Conversion Rate (%)')
+plt.legend()
+plt.grid(True, axis='y', linestyle='--', alpha=0.7)
+
+# Сохранение графика в файл
+if not os.path.exists('Project_1_Funnel_analysis/visualizations'):
+    os.makedirs('Project_1_Funnel_analysis/visualizations')
+plt.savefig('Project_1_Funnel_analysis/visualizations/conversion_comparison.png')
+plt.show()
+
+# Тепловая карта конверсий по устройствам и регионам
+pivot_table = df.pivot_table(index='device_type', columns='region', values='funnel_stage', 
+                             aggfunc=lambda x: (x == 'paid').mean() * 100)
+plt.figure(figsize=(10, 6))
+sns.heatmap(pivot_table, annot=True, fmt='.1f', cmap='YlGnBu')
+plt.title('Conversion Rate (%) by Device Type and Region')
+plt.xlabel('Region')
+plt.ylabel('Device Type')
+
+# Сохранение графика в файл
+if not os.path.exists('Project_1_Funnel_analysis/visualizations'):
+    os.makedirs('Project_1_Funnel_analysis/visualizations')
+plt.savefig('Project_1_Funnel_analysis/visualizations/heatmap_conversion.png')
 plt.show()
