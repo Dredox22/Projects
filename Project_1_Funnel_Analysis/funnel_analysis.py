@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import os
 
 # Генерация синтетических данных
 np.random.seed(42)  # Для воспроизводимости
@@ -14,6 +15,9 @@ data = {
 df = pd.DataFrame(data).drop_duplicates('session_id')
 
 # Сохранение данных (опционально)
-df.to_csv('/data/funnel_data.csv', index=False)
+
+os.makedirs('Project_1_Funnel_Analysis/data', exist_ok=True)
+
+df.to_csv('Project_1_Funnel_Analysis/data/funnel_data.csv', index=False)
 print("Первые 5 строк данных:")
 print(df.head())
