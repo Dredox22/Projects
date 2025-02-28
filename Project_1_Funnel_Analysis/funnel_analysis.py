@@ -3,6 +3,7 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 import seaborn as sns
+from scipy.stats import chi2_contingency
 
 # Генерация синтетических данных
 np.random.seed(42)
@@ -60,6 +61,14 @@ time_analysis['conversion'] = (time_analysis['paid'] / time_analysis['visit']) *
 print("\nКонверсия по дням:")
 print(time_analysis[['conversion']].head())
 
+# Статистический тест: Chi-squared для зависимости конверсии от устройства
+contingency_table = funnel_by_device[['paid', 'visit']].copy()
+contingency_table['not_paid'] = contingency_table['visit'] - contingency_table['paid']
+contingency_table = contingency_table[['paid', 'not_paid']]
+chi2, p, dof, expected = chi2_contingency(contingency_table)
+print("\nChi-squared тест зависимости конверсии от устройства:")
+print(f"Chi²: {chi2:.2f}, p-value: {p:.4f}, degrees of freedom: {dof}")
+
 # Визуализация воронки по устройствам
 plt.figure(figsize=(10, 6))
 for device in funnel_by_device.index:
@@ -73,8 +82,10 @@ plt.grid(True)
 # Сохранение графика в файл
 if not os.path.exists('Project_1_Funnel_analysis/visualizations'):
     os.makedirs('Project_1_Funnel_analysis/visualizations')
+
 plt.savefig('Project_1_Funnel_analysis/visualizations/funnel_by_device.png')
 plt.show()
+
 
 # Сравнительный график конверсий
 plt.figure(figsize=(12, 6))
