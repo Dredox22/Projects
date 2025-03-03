@@ -24,6 +24,6 @@
    - Результат: Точность 92%, MSE = 5000.
 
 ## Контакты
-- Email: [твой email]
+- Email: [da@ktikhonov.ru]
 - LinkedIn: [ссылка]
 - GitHub: [ссылка на профиль]
